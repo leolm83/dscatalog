@@ -17,10 +17,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<CategoryDTO> findAll(){
         List<Category> categories =  repository.findAll();
-        List<CategoryDTO> categoriesDTOs = new ArrayList<>();
-        for(Category category : categories){
-            categoriesDTOs.add(new CategoryDTO(category));
-        }
-        return categoriesDTOs;
+        return categories.stream().parallel().map(CategoryDTO::new).toList();
+
     }
 }
