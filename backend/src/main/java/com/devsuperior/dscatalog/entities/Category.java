@@ -19,16 +19,22 @@ public class Category implements Serializable {
     private Long id;
     private String name;
 
-    @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant createdAt;
 
-    @UpdateTimestamp
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant updatedAt;
     public Category() {
     }
+    @PrePersist
+    public void prePersist(){
+        createdAt = Instant.now();
+    }
+    @PreUpdate
+    public void preUpdate(){
+        updatedAt = Instant.now();
 
+    }
     public Instant getCreatedAt() {
         return createdAt;
     }
@@ -36,6 +42,7 @@ public class Category implements Serializable {
     public Instant getUpdatedAt() {
         return updatedAt;
     }
+
 
     public Category(Long id, String name) {
         this.id = id;
