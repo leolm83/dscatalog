@@ -2,9 +2,12 @@ package com.devsuperior.dscatalog.entities;
 
 import com.devsuperior.dscatalog.dtos.CategoryDTO;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 @Entity
 @Table(name = "tb_category")
@@ -16,7 +19,22 @@ public class Category implements Serializable {
     private Long id;
     private String name;
 
+    @CreationTimestamp
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
+
+    @UpdateTimestamp
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updatedAt;
     public Category() {
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
     }
 
     public Category(Long id, String name) {
