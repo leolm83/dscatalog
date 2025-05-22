@@ -2,6 +2,7 @@ package com.devsuperior.dscatalog.services;
 
 import com.devsuperior.dscatalog.dtos.ProductDTO;
 import com.devsuperior.dscatalog.entities.Product;
+import com.devsuperior.dscatalog.mappers.ProductMapper;
 import com.devsuperior.dscatalog.repositories.ProductRepository;
 import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
@@ -18,6 +19,9 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
+
+    @Autowired
+    private ProductMapper productMapper;
     @Autowired
     private ProductRepository repository;
     @Transactional(readOnly = true)
@@ -34,8 +38,7 @@ public class ProductService {
     }
     @Transactional
     public ProductDTO insert(ProductDTO dto) {
-//        Product product = new Product(dto);
-        Product product = new Product();
+        Product product = productMapper.copyDtoToEntity(dto,new Product());
         product = repository.save(product);
         return  new ProductDTO(product);
     }
@@ -43,7 +46,7 @@ public class ProductService {
     public ProductDTO update(Long id,ProductDTO dto) {
         try {
             Product product = repository.getReferenceById(id);
-            product.setName(dto.getName());
+            productMapper.copyDtoToEntity(dto,product);
             repository.save(product);
             return new ProductDTO(product);
         }catch (EntityNotFoundException e){
